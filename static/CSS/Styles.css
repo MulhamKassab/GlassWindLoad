@@ -12,7 +12,7 @@ html, body {
 
 body {
     font-family: 'Roboto', sans-serif;
-    background: linear-gradient(145deg, #f9c6c6 0%, #dd1d21 45%, #b5161b 100%);
+    background: linear-gradient(145deg, #5f4f4f 0%, #4a4242 45%, #3a3939 100%);
     background-size: cover;
     background-position: center;
     display: flex;
@@ -179,7 +179,7 @@ select:hover, select:focus {
 
 .input-success {
     border: 2px solid green;
-    background-color: #e6ffe6; /* Light green background for valid fields */
+    background-color: #f2f4f2; /* Light green background for valid fields */
 }
 
 .error-message {
