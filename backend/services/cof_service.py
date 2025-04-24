@@ -1,4 +1,4 @@
-from old_style_nfl_lookup import find_lookup_nfl
+from services.old_style_nfl_lookup import find_lookup_nfl
 from utils.cof_math import calculate_cof
 from config import MODULUS_OF_ELASTICITY
 

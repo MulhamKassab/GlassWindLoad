@@ -17,6 +17,9 @@ def validate_input(data):
     for key in required_keys:
         if key not in data:
             return False, f"Missing required field: {key}"
+        
+    if len(data["layersTypes"]) != len(data["layersThicknesses"]):
+        return False, "Mismatch between layersTypes and layersThicknesses count."
 
     if not isinstance(data["glassLength"], (int, float)) or data["glassLength"] <= 0:
         return False, "glassLength must be a positive number."

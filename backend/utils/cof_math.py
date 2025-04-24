@@ -1,62 +1,52 @@
 import os
+import math
 import json
 from config import DATA_DIR
 
-def get_gtf_values(input_data):
+def load_thickness_spec():
     """
-    Retrieve GTF values (Glass Type Factor) for each layer based on strength and glazing type.
-
-    Args:
-        input_data (dict): The user input including 'glassLayersStrengthType' and 'glazingType'
-
-    Returns:
-        dict: {
-            "short": [GTF1, GTF2, ...],
-            "long": [GTF1, GTF2, ...]
-        }
+    Load nominal and minimum thickness mapping from JSON.
     """
-    glazing_type = input_data.get("glazingType")
-    strength_types = input_data.get("glassLayersStrengthType", [])
+    path = os.path.join(DATA_DIR, "Glass_Thicknesses.json")
+    if not os.path.exists(path):
+        raise FileNotFoundError(f"Glass thickness data not found at: {path}")
+    
+    with open(path, "r") as f:
+        data = json.load(f)
+    
+    return data["Glass_Thicknesses"]
 
-    gtf_result = {
-        "short": [],
-        "long": []
-    }
+def get_minimum_thickness(nominal_thickness, spec_data):
+    """
+    Match the minimum thickness for a given nominal value.
+    """
+    for item in spec_data:
+        if float(item["Nominal_mm"]) == float(nominal_thickness):
+            return float(item["Minimum_mm"])
+    raise ValueError(f"No matching minimum thickness for nominal value: {nominal_thickness}")
 
-    if glazing_type == "single":
-        json_path = os.path.join(DATA_DIR, "GTF", "GTF_SL.json")
-        with open(json_path, 'r') as f:
-            data = json.load(f)
-            short_data = data["GTF_Single_Lite"]["short"]
-            long_data = data["GTF_Single_Lite"]["long"]
+def calculate_coefficients(length, width):
+    """
+    Calculate r0, r1, r2 based on L/W ratio.
+    """
+    ratio = length / width
+    r0 = 0.553 - 3.83 * ratio + 1.11 * ratio**2 - 0.0969 * ratio**3
+    r1 = -2.29 + 5.83 * ratio - 2.17 * ratio**2 + 0.2067 * ratio**3
+    r2 = 1.485 - 1.908 * ratio + 0.815 * ratio**2 - 0.0822 * ratio**3
+    return r0, r1, r2
 
-        for strength in strength_types:
-            if strength not in short_data or strength not in long_data:
-                raise ValueError(f"GTF type not found: {strength}")
-            gtf_result["short"].append(short_data[strength])
-            gtf_result["long"].append(long_data[strength])
+def calculate_x(load, length, width, E, min_thickness):
+    """
+    Calculate X used in the COF equation.
+    """
+    return math.log(math.log((load * (length * width)**2) / (E * min_thickness**4)))
 
-    elif glazing_type == "double":
-        if len(strength_types) != 2:
-            raise ValueError("Double glazing requires exactly two strength types")
-
-        lite1, lite2 = strength_types
-        short_path = os.path.join(DATA_DIR, "GTF", "GTF_IG_SD.json")
-        long_path = os.path.join(DATA_DIR, "GTF", "GTF_IG_LD.json")
-
-        with open(short_path, 'r') as f1, open(long_path, 'r') as f2:
-            short_data = json.load(f1)["GTF"]
-            long_data = json.load(f2)["GTF"]
-
-        try:
-            gtf_result["short"].append(short_data[lite1][lite2]["GTF1"])
-            gtf_result["short"].append(short_data[lite1][lite2]["GTF2"])
-            gtf_result["long"].append(long_data[lite1][lite2]["GTF1"])
-            gtf_result["long"].append(long_data[lite1][lite2]["GTF2"])
-        except KeyError:
-            raise ValueError(f"Invalid strength pair: {lite1}, {lite2}")
-
-    else:
-        raise ValueError(f"Invalid glazing type: {glazing_type}")
-
-    return gtf_result
+def calculate_cof(load, length, width, E, nominal_thickness):
+    """
+    Final COF value using ASTM E1300 formula.
+    """
+    spec_data = load_thickness_spec()
+    min_thickness = get_minimum_thickness(nominal_thickness, spec_data)
+    r0, r1, r2 = calculate_coefficients(length, width)
+    x = calculate_x(load, length, width, E, min_thickness)
+    return min_thickness * math.exp(r0 + r1 * x + r2 * x**2)

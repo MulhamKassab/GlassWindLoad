@@ -25,11 +25,12 @@ def calculate():
 
         # Extract main input data
         input_data = data.get("data", {})
-        ply_thicknesses = data.get("plyThicknessList", [])
 
         is_valid, msg = validate_input(input_data)
         if not is_valid:
             return jsonify({"error": msg}), 400
+        
+        ply_thicknesses = data.get("plyThicknessList", [])
 
         # === Step 1: GTF Calculation ===
         gtf = get_gtf_values(input_data)

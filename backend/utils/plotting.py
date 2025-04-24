@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 from collections import defaultdict
 from scipy.spatial import cKDTree
 import json
+from config import DATA_DIR
 
 plt.switch_backend('Agg')  # For headless environments (no GUI)
 
@@ -61,7 +62,7 @@ def plot_nfl_from_json(length, width, supported_sides, thickness, save_path, cal
     Returns (interpolated_nfl: float, [plot_image_path])
     """
     key = f"NFL{thickness}mm{supported_sides}S"
-    json_file_path = os.path.join("data", "NFL", layer_type, f"{supported_sides}Sided", f"{key}.json")
+    json_file_path = os.path.join("DATA_DIR", "NFL", layer_type, f"{supported_sides}Sided", f"{key}.json")
     data_list = load_nfl_json(json_file_path, key)
     grouped_points = group_points_by_nfl(data_list)
 

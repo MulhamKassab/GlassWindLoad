@@ -1,7 +1,8 @@
-import uuid, os
+import os
 import io
 from config import DOWNLOAD_DIR
 from pdf_creation import create_pdf
+from uuid import uuid4
 
 def generate_pdf_report(
     input_data,
@@ -41,7 +42,7 @@ def generate_pdf_report(
     # Paths
     logo_path = os.path.join(DOWNLOAD_DIR, "logo.png")
     first_page_image = os.path.join(DOWNLOAD_DIR, "first_page.jpg")
-    filename = f"deflection_{uuid.uuid4().hex}.pdf"
+    filename = f"deflection_{uuid4().hex}.pdf"
     output_pdf_path = os.path.join(DOWNLOAD_DIR, filename)
 
     # Prepare buffer

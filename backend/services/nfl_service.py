@@ -1,5 +1,5 @@
-from new_style_nfl_interpolation import calculate_interpolated_nfl
-from old_style_nfl_lookup import find_lookup_nfl
+from services.new_style_nfl_interpolation import calculate_interpolated_nfl
+from services.old_style_nfl_lookup import find_lookup_nfl
 
 def calculate_nfl_for_supported_sides(input_data):
     """
