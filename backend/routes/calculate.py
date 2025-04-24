@@ -6,8 +6,14 @@ from services.lsf_service import get_lsf_values
 from services.lr_service import calculate_lr_values
 from services.pdf_service import generate_pdf_report
 from services.glass_weight_service import calculate_glass_weight
+from models.input_schema import validate_input
+
 
 calculate_bp = Blueprint('calculate', __name__)
+
+
+
+
 
 @calculate_bp.route('/calculate', methods=['POST'])
 def calculate():
@@ -21,7 +27,9 @@ def calculate():
         input_data = data.get("data", {})
         ply_thicknesses = data.get("plyThicknessList", [])
 
-        # TODO: Unpack and validate input_data here
+        is_valid, msg = validate_input(input_data)
+        if not is_valid:
+            return jsonify({"error": msg}), 400
 
         # === Step 1: GTF Calculation ===
         gtf = get_gtf_values(input_data)

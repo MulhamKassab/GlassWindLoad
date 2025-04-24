@@ -52,7 +52,11 @@ def calculate_lr(nfl_result, gtf, lsf_value, glazing_type):
             lr_result[duration] = [lr1, lr2]
         else:
             # For single glazing, multiply NFL result by GTF values
-            lr_result[duration] = [nfl_result * g for g in gtf_duration]
+            if isinstance(nfl_result, list):
+                single_nfl = nfl_result[0]
+            else:
+                single_nfl = nfl_result
+                lr_result[duration] = [round(single_nfl * gtf, 2) for gtf in gtf_vals]
 
 
     # Return the calculated LR results

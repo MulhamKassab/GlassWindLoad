@@ -1,4 +1,4 @@
-import os
+import uuid, os
 import io
 from config import DOWNLOAD_DIR
 from pdf_creation import create_pdf
@@ -41,7 +41,8 @@ def generate_pdf_report(
     # Paths
     logo_path = os.path.join(DOWNLOAD_DIR, "logo.png")
     first_page_image = os.path.join(DOWNLOAD_DIR, "first_page.jpg")
-    output_pdf_path = os.path.join(DOWNLOAD_DIR, "deflection_result.pdf")
+    filename = f"deflection_{uuid.uuid4().hex}.pdf"
+    output_pdf_path = os.path.join(DOWNLOAD_DIR, filename)
 
     # Prepare buffer
     buffer = io.BytesIO()
@@ -75,4 +76,5 @@ def generate_pdf_report(
         f.write(buffer.read())
 
     # Return downloadable URL path
-    return f"/api/download/deflection_result.pdf"
+    return f"/api/download/{filename}"
+
