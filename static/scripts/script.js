@@ -247,43 +247,23 @@ function sendToServer(data, plyThicknessList) {
         resultsDiv.appendChild(pdfLink);
     })
     .catch(error => {
-    console.error('Error sending data to the server:', error);
+        console.error('Error sending data to the server:', error);
 
-    const resultsDiv = document.getElementById('results');
-    resultsDiv.innerHTML = '';
+        // Extract the backend message and display it in the results div
+        const errorMessage = error.response?.data || "An unexpected error occurred. Please try again.";
+        const resultsDiv = document.getElementById('results');
+        resultsDiv.innerHTML = `<div class="error-message">${errorMessage}</div>`; // Here is where this line is placed
 
-    let errorData = error.response?.data;
-
-    if (typeof errorData === 'string') {
-        // Backend sent a plain string
-        resultsDiv.innerHTML = `<div class="error-message">${errorData}</div>`;
-    } else if (typeof errorData === 'object') {
-        // Backend sent JSON
-        let msg = `<div class="error-message"><b>${errorData.error}</b></div>`;
-
-        if (errorData.minLength) {
-            msg += `<div style="color: gray;">Minimum Length Required: <b>${errorData.minLength} mm</b></div>`;
-        }
-        if (errorData.minWidth) {
-            msg += `<div style="color: gray;">Minimum Width Required: <b>${errorData.minWidth} mm</b></div>`;
-        }
-
-        resultsDiv.innerHTML = msg;
-
-        // 👇 Safe .includes usage (only if it's a string)
-        const errorText = errorData.error?.toLowerCase?.() || '';
-        if (errorText.includes('width') || errorText.includes('length')) {
+         // Check if the error relates to width or length
+        if (errorMessage.includes('width') || errorMessage.includes('length')) {
             const widthField = document.getElementById('glassWidth');
             const lengthField = document.getElementById('glassLength');
+
+            // Highlight the fields with an error
             if (widthField) widthField.classList.add('input-error');
             if (lengthField) lengthField.classList.add('input-error');
         }
-    } else {
-        resultsDiv.innerHTML = `<div class="error-message">An unexpected error occurred. Please try again.</div>`;
-    }
-})
-
-
+    })
     .finally(() => {
         // Hide the spinner once the request is complete
         hideSpinner();
