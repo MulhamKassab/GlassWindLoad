@@ -255,31 +255,34 @@ function sendToServer(data, plyThicknessList) {
     let errorData = error.response?.data;
 
     if (typeof errorData === 'string') {
-        // If backend sent a plain string (not JSON)
+        // Backend sent a plain string
         resultsDiv.innerHTML = `<div class="error-message">${errorData}</div>`;
     } else if (typeof errorData === 'object') {
-        // If backend sent JSON with min length/width
-        let msg = `<div class="error-message">${errorData.error}</div>`;
+        // Backend sent JSON
+        let msg = `<div class="error-message"><b>${errorData.error}</b></div>`;
 
-       if (errorData.minLength) {
+        if (errorData.minLength) {
             msg += `<div style="color: gray;">Minimum Length Required: <b>${errorData.minLength} mm</b></div>`;
         }
         if (errorData.minWidth) {
             msg += `<div style="color: gray;">Minimum Width Required: <b>${errorData.minWidth} mm</b></div>`;
         }
 
-
         resultsDiv.innerHTML = msg;
+
+        // 👇 Safe .includes usage (only if it's a string)
+        const errorText = errorData.error?.toLowerCase?.() || '';
+        if (errorText.includes('width') || errorText.includes('length')) {
+            const widthField = document.getElementById('glassWidth');
+            const lengthField = document.getElementById('glassLength');
+            if (widthField) widthField.classList.add('input-error');
+            if (lengthField) lengthField.classList.add('input-error');
+        }
     } else {
         resultsDiv.innerHTML = `<div class="error-message">An unexpected error occurred. Please try again.</div>`;
     }
+});
 
-    // Optional: highlight inputs
-    const widthField = document.getElementById('glassWidth');
-    const lengthField = document.getElementById('glassLength');
-    if (widthField) widthField.classList.add('input-error');
-    if (lengthField) lengthField.classList.add('input-error');
-})
 
     .finally(() => {
         // Hide the spinner once the request is complete
