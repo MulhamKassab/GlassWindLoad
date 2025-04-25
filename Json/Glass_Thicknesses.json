@@ -67,16 +67,22 @@
             "Minimum_in": "0.719"
         },
         {
-            "Nominal_mm": 20,
-            "Minimum_mm": 21.44,
-            "Nominal_in": "3/4",
-            "Minimum_in": "0.719"
-        },
-        {
+            "Nominal_mm": 20.0,
+            "Minimum_mm": 19.20,
+            "Nominal_in": "13/16",
+            "Minimum_in": "0.756"
+          },
+          {
             "Nominal_mm": 22.0,
             "Minimum_mm": 21.44,
             "Nominal_in": "7/8",
             "Minimum_in": "0.844"
-        }
-    ]
-}
+          },
+          {
+            "Nominal_mm": 24.0,
+            "Minimum_mm": 23.15,
+            "Nominal_in": "15/16",
+            "Minimum_in": "0.911"
+          }
+        ]
+    }
