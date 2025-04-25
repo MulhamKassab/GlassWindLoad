@@ -247,23 +247,40 @@ function sendToServer(data, plyThicknessList) {
         resultsDiv.appendChild(pdfLink);
     })
     .catch(error => {
-        console.error('Error sending data to the server:', error);
+    console.error('Error sending data to the server:', error);
 
-        // Extract the backend message and display it in the results div
-        const errorMessage = error.response?.data || "An unexpected error occurred. Please try again.";
-        const resultsDiv = document.getElementById('results');
-        resultsDiv.innerHTML = `<div class="error-message">${errorMessage}</div>`; // Here is where this line is placed
+    const resultsDiv = document.getElementById('results');
+    resultsDiv.innerHTML = '';
 
-         // Check if the error relates to width or length
-        if (errorMessage.includes('width') || errorMessage.includes('length')) {
-            const widthField = document.getElementById('glassWidth');
-            const lengthField = document.getElementById('glassLength');
+    let errorData = error.response?.data;
 
-            // Highlight the fields with an error
-            if (widthField) widthField.classList.add('input-error');
-            if (lengthField) lengthField.classList.add('input-error');
+    if (typeof errorData === 'string') {
+        // If backend sent a plain string (not JSON)
+        resultsDiv.innerHTML = `<div class="error-message">${errorData}</div>`;
+    } else if (typeof errorData === 'object') {
+        // If backend sent JSON with min length/width
+        let msg = `<div class="error-message">${errorData.error}</div>`;
+
+       if (errorData.minLength) {
+            msg += `<div style="color: gray;">Minimum Length Required: <b>${errorData.minLength} mm</b></div>`;
         }
-    })
+        if (errorData.minWidth) {
+            msg += `<div style="color: gray;">Minimum Width Required: <b>${errorData.minWidth} mm</b></div>`;
+        }
+
+
+        resultsDiv.innerHTML = msg;
+    } else {
+        resultsDiv.innerHTML = `<div class="error-message">An unexpected error occurred. Please try again.</div>`;
+    }
+
+    // Optional: highlight inputs
+    const widthField = document.getElementById('glassWidth');
+    const lengthField = document.getElementById('glassLength');
+    if (widthField) widthField.classList.add('input-error');
+    if (lengthField) lengthField.classList.add('input-error');
+})
+
     .finally(() => {
         // Hide the spinner once the request is complete
         hideSpinner();
