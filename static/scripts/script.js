@@ -281,7 +281,7 @@ function sendToServer(data, plyThicknessList) {
     } else {
         resultsDiv.innerHTML = `<div class="error-message">An unexpected error occurred. Please try again.</div>`;
     }
-});
+})
 
 
     .finally(() => {
