@@ -11,7 +11,6 @@ from glass_weight import calculate_glass_weight
 from get_load_share_factor import get_load_share_factor
 from NFL_COF_1and2Sided import find_load_for_given_length
 from cof_recommendation import find_correct_thickness
-from find_min_width_length import find_min_width_or_length
 
 app = Flask(__name__)
 
@@ -95,20 +94,9 @@ def calculate():
                     long_cof_to_send.append(cof_long_duration)
             except ValueError:
                 if number_of_supported_sides == 4:
-                    min_length = find_min_width_or_length(shortDurationLoad, glass_width, modulus_of_elasticity, thickness, vary='length')
-                    min_width = find_min_width_or_length(shortDurationLoad, glass_length, modulus_of_elasticity, thickness, vary='width')
-                    return jsonify({
-                        "error": "Adjust the width or the length of the glass",
-                        "minimum length required": min_length,
-                        "minimum width required": min_width
-                    }), 400
+                    return jsonify("Adjust the width or the length of the glass"), 400
                 else:
-                    min_required_length = find_min_width_or_length(shortDurationLoad, 1, modulus_of_elasticity, thickness, vary='length')  # using 1m width as base
-                    return jsonify({
-                        "error": "Adjust the length of the unsupported side",
-                        "minimum length required": min_required_length
-                    }), 400
-
+                    return jsonify("Adjust the length of the unsupported side"), 400
 
             except TypeError:
                 if number_of_supported_sides == 4:
