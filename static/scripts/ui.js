@@ -185,7 +185,7 @@ function updatePlys(layerIndex) {
         {value: 6.0, display: '6.0 (5.56)'},
         {value: 8.0, display: '8.0 (7.42)'},
         {value: 10.0, display: '10.0 (9.02)'},
-//        {value: 12.0, display: '12.0 (11.91)'},
+        {value: 12.0, display: '12.0 (11.91)'},
 //        {value: 16.0, display: '16.0 (15.09)'},
 //        {value: 19.0, display: '19.0 (18.26)'},
 //        {value: 22.0, display: '22.0 (21.44)'}
