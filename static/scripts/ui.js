@@ -10,7 +10,7 @@ function updateSupportedSides() {
 
 
      if (supportedSides === "2" || supportedSides === "1") {
-        lengthLabel.textContent = "Unsupported Length (mm)";
+        lengthLabel.textContent = "Unsupported Width (mm)";
         widthLabel.textContent = "Supported Length (mm)";
         widthLabel.style.display = "block"; // Show width field for 2-sided support
         widthInput.style.display = "block";
