@@ -94,7 +94,7 @@ input[type="number"]:hover, input[type="number"]:focus, select:hover, select:foc
 
 .input-changed {
     border: 2px solid green; /* Highlight modified fields */
-    background-color: #e6ffe6; /* Light green background */
+    background-color: #f0f2f0; /* Light green background */
     transition: all 0.3s ease; /* Smooth transition */
 }
 
