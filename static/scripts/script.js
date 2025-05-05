@@ -142,7 +142,7 @@ function gatherDataFromInput() {
 
             let pliesTotalThickness = 0;
 
-            const lami_1_2_sided_nominal = [5.56, 7.42, 9.02, 11.91, 15.09, 18.26,20];
+            const lami_1_2_sided_nominal = [5.56, 7.42, 9.02, 11.91, 15.09, 18.26,20, 24];
             const lami_4_sided_nominal = [4.57,5.56, 7.42, 9.02, 11.91, 15.09, 18.26,20];
 
             const lami_1_2_sided = [6, 8, 10, 12, 16, 19,20];
