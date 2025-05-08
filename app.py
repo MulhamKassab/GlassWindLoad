@@ -31,12 +31,13 @@ def home():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        email = request.form.get('email')
+        username = request.form.get('username')
         password = request.form.get('password')
 
-        if email in USERS and check_password_hash(USERS[email], password):
-            session['user'] = email
+        if username in USERS and check_password_hash(USERS[username], password):
+            session['user'] = username
             return redirect('/')
+
         else:
             return render_template('login.html', error="Invalid email or password.")
     return render_template('login.html')
