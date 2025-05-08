@@ -17,10 +17,11 @@ from werkzeug.security import check_password_hash, generate_password_hash
 app = Flask(__name__)
 app.secret_key = 'your-secret-key'
 
-# ✅ Set hashed password only once
-ADMIN_EMAIL = "admin@gutmann.com"
-ADMIN_PASSWORD_HASH = generate_password_hash("Gutmann2025")  # Do this once
-
+USERS = {
+    "admin@gutmann.com": generate_password_hash("admin_2025"),
+    "admin1@gutmann.com": generate_password_hash("admin1_2025"),
+    "admin2@gutmann.com": generate_password_hash("admin2_2025")
+}
 @app.route('/')
 def home():
     if 'user' not in session:
@@ -32,11 +33,12 @@ def login():
     if request.method == 'POST':
         email = request.form.get('email')
         password = request.form.get('password')
-        if email == ADMIN_EMAIL and check_password_hash(ADMIN_PASSWORD_HASH, password):
+
+        if email in USERS and check_password_hash(USERS[email], password):
             session['user'] = email
             return redirect('/')
         else:
-            return render_template('login.html', error="Invalid credentials.")
+            return render_template('login.html', error="Invalid email or password.")
     return render_template('login.html')
 
 @app.route('/logout')
