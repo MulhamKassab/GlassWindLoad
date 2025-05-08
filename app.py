@@ -1,6 +1,6 @@
 import os
 import io
-from flask import Flask, jsonify, render_template, request, send_file, url_for
+from flask import Flask, jsonify, render_template, request, send_file, url_for, redirect, session
 from nfl_calculation import calculate_nfl
 from get_gtf import get_gtf_value
 from lr_calculation import calculate_lr
@@ -11,13 +11,38 @@ from glass_weight import calculate_glass_weight
 from get_load_share_factor import get_load_share_factor
 from NFL_COF_1and2Sided import find_load_for_given_length
 from cof_recommendation import find_correct_thickness
+from werkzeug.security import check_password_hash, generate_password_hash
+
 
 app = Flask(__name__)
+app.secret_key = 'your-secret-key'
 
+# ✅ Set hashed password only once
+ADMIN_EMAIL = "admin@gutmann.com"
+ADMIN_PASSWORD_HASH = generate_password_hash("Gutmann2025")  # Do this once
 
 @app.route('/')
 def home():
+    if 'user' not in session:
+        return redirect('/login')
     return render_template('index.html')
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        email = request.form.get('email')
+        password = request.form.get('password')
+        if email == ADMIN_EMAIL and check_password_hash(ADMIN_PASSWORD_HASH, password):
+            session['user'] = email
+            return redirect('/')
+        else:
+            return render_template('login.html', error="Invalid credentials.")
+    return render_template('login.html')
+
+@app.route('/logout')
+def logout():
+    session.pop('user', None)
+    return redirect('/login')
 
 
 @app.route("/calculate", methods=['POST'])

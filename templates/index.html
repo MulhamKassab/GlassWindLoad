@@ -9,10 +9,33 @@
 <body>
     <div class="container">
         <!-- Company Logo at the top -->
-        <div class="logo-container">
-<img src="{{ url_for('static', filename='../download/logo.png') }}" alt="Gutmann Logo" class="company-logo">
-        </div>
+        <!-- Top Bar with Logo and Logout -->
+    <!-- Top bar with logo and logout button -->
+<div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 0;">
+    <div class="logo-container">
+      <img src="{{ url_for('static', filename='../download/logo.png') }}" alt="Gutmann Logo" class="company-logo">
+    </div>
+    <a href="/logout" class="btn" style="
+        background-color: #DF0029;
+        color: white;
+        padding: 8px 20px;
+        border-radius: 5px;
+        font-weight: bold;
+        font-size: 14px;
+        text-decoration: none;
+        text-align: center;
+        display: inline-block;
+        margin-right: 10px;
+        width: auto;
+        min-width: 100px;
+        margin-right: 10px;
+        margin-top: -100px;
+    ">
+    Logout
+</a>
 
+  </div>
+  
         <h1>Glass Wind Load Calculator</h1>
         <form id="calculationForm" class="form">
             <div class="form-container">
