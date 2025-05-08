@@ -18,6 +18,7 @@ app = Flask(__name__)
 app.secret_key = 'your-secret-key'
 
 USERS = {
+    "GUTMANNPVB": generate_password_hash("GUTMANNPVB2025"),
     "admin": generate_password_hash("admin_2025"),
     "admin1": generate_password_hash("admin1_2025"),
     "admin2": generate_password_hash("admin2_2025")
